@@ -9,6 +9,7 @@ const port = 3000
 
 // import routes
 const indexRouter = require('./routes/index');
+const roomRouter = require('./routes/rooms');
 
 app
   .use(compression())
@@ -29,6 +30,12 @@ app
 }))
 
 app.get('/', indexRouter)
+app.get('/create-account', indexRouter)
+app.post('/create-account', indexRouter)
+app.post('/submit-account', indexRouter)
+
+app.get('/:genre', roomRouter);
+
 
 const server = app.listen(process.env.PORT || 3000, _ => {
   console.log("listening on port 3000")

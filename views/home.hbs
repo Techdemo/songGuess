@@ -1,1 +1,12 @@
-<h1>JOEJOE</h1>
+<h2>Guess all of the songs!</h2>
+<form method="POST" action="/submit-account">
+{{#if message}}
+  <p>{{message}}</p>
+{{/if}}
+  <fieldset>
+    <label for="username">Log in</label>
+    <input type="text" name="username">
+    <button type="submit">Log in</button>
+  </fieldset>
+  <a href="/create-account">Create Account</a>
+</form>
