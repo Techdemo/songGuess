@@ -1,8 +1,10 @@
 const express = require('express')
+const browserSync = require('browser-sync');
 const hbs = require('express-handlebars');
 const bodyParser = require('body-parser')
 const compression = require('compression')
 const path = require('path')
+const socket = require('socket.io');
 
 const app = express()
 const port = 3000
@@ -10,6 +12,41 @@ const port = 3000
 // import routes
 const indexRouter = require('./routes/index');
 const roomRouter = require('./routes/rooms');
+
+const server = app.listen(port, listening())
+
+function listening() {
+  console.log(`Demo server available on http://localhost:${port}`);
+    // https://ponyfoo.com/articles/a-browsersync-primer#inside-a-node-application
+  browserSync({
+    files: ['views/**/*.{html,js,css,hbs}'],
+    online: false,
+    open: false,
+    port: port + 1,
+    proxy: 'localhost:' + port,
+    ui: false
+  });
+}
+
+const io = socket(server)
+
+// socket functions
+const answerSubmit = require('./sockets/answerSubmit');
+
+let count = 0
+io.on('connection', socket => {
+  count++
+  io.sockets.emit('broadcast', count + ' people online!')
+  socket.on('disconnect', socket => {
+    count--
+    io.sockets.emit('broadcast', count + ' people online!');
+  })
+
+  socket.on('answer-input', data => {
+    answerSubmit(data)
+
+  })
+})
 
 app
   .use(compression())
@@ -36,7 +73,3 @@ app.post('/submit-account', indexRouter)
 
 app.get('/:genre', roomRouter);
 
-
-const server = app.listen(process.env.PORT || 3000, _ => {
-  console.log("listening on port 3000")
-})

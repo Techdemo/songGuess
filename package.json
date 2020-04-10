@@ -12,11 +12,13 @@
   "dependencies": {
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
+    "browser-sync": "^2.26.7",
     "chalk": "^3.0.0",
     "compression": "^1.7.4",
     "express": "^4.17.1",
     "express-handlebars": "^3.1.0",
     "firebase-admin": "^8.10.0",
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.2",
+    "socket.io": "^2.3.0"
   }
 }

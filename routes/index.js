@@ -19,9 +19,9 @@ router.post('/create-account', async function(req, res, next){
   let add = await db.add(req.body.username)
 
   if(!add){
-    res.render('home', {
+    res.render('createAccount', {
       layout: 'default',
-      message: 'failed to add username to database'
+      message: 'username already exists'
     })
     return
   }
