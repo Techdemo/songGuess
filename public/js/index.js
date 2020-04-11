@@ -1,12 +1,11 @@
 import { guessTrack } from './guessTrack.js';
+import { refreshTrack } from './refreshTrack.js';
+
+let aud = document.getElementById("audioPlayer");
+aud.onended = () => refreshTrack()
 
 window.addEventListener('load', event => {
+
   const socket = io()
-
-    socket.on('broadcast', function (data) {
-      let countTag = document.getElementById("Count");
-      countTag.innerHTML = data
-
-      guessTrack(socket)
-    })
+  guessTrack(socket)
 })

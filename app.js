@@ -33,18 +33,10 @@ const io = socket(server)
 // socket functions
 const answerSubmit = require('./sockets/answerSubmit');
 
-let count = 0
-io.on('connection', socket => {
-  count++
-  io.sockets.emit('broadcast', count + ' people online!')
-  socket.on('disconnect', socket => {
-    count--
-    io.sockets.emit('broadcast', count + ' people online!');
-  })
 
+io.on('connection', socket => {
   socket.on('answer-input', data => {
     answerSubmit(data)
-
   })
 })
 

@@ -1,8 +1,11 @@
+import { openModal } from "./modal.js"
+
 const guessTrack = (socket) => {
   const form = document.getElementById('track-form')
 
   form.addEventListener('submit', event => {
     event.preventDefault()
+    openModal('Een nieuwe ronde start')
     let songInput = document.getElementById('song-input').value
     let artistInput = document.getElementById('artist-input').value
 
@@ -10,8 +13,6 @@ const guessTrack = (socket) => {
         song: songInput,
         artist: artistInput
     })
-
-    alert(`${songInput} + ${artistInput}`)
   })
 }
 
