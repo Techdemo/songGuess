@@ -1,5 +1,8 @@
 import { openModal } from './modal.js';
 
-export const refreshTrack = () => {
-  openModal('Track ended')
+export const refreshTrack = (socket) => {
+  openModal('track ended')
+  //
+
+  // socket.emit('ready-up', 'test')
 }

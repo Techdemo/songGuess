@@ -3,6 +3,8 @@ import { openModal } from "./modal.js"
 const guessTrack = (socket) => {
   const form = document.getElementById('track-form')
 
+  form.style.display = "block"
+
   form.addEventListener('submit', event => {
     event.preventDefault()
     openModal('Een nieuwe ronde start')

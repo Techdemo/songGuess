@@ -33,10 +33,32 @@ const io = socket(server)
 // socket functions
 const answerSubmit = require('./sockets/answerSubmit');
 
-
+let count = 0
+let playerReady = []
 io.on('connection', socket => {
+  count++
+
+  if(count > 1 ) {
+    socket.emit('game-begin', 'enough players are present, the game can begin.')
+  }
+  console.log('number of people online', count)
+
   socket.on('answer-input', data => {
     answerSubmit(data)
+  })
+
+  socket.on('ready-player', id => {
+    playerReady.push(id)
+    console.log(playerReady)
+    if(playerReady.length == count){
+      // hier de functie die de modal laat aftellen bij iedereen.
+      io.emit('open-modal', 'everyone is ready, start a new game')
+    }
+  })
+
+  socket.on('disconnect', () => {
+    count--
+    console.log('number of people online', count)
   })
 })
 

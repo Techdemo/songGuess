@@ -144,6 +144,9 @@ form {
   min-height: 250px;
   max-width: 500px;
 }
+#track-form {
+  display: none;
+}
 
 button {
   -webkit-box-shadow: 4px 4px 0px -1px #D48A10;
