@@ -5,7 +5,13 @@ const bodyParser = require('body-parser')
 const compression = require('compression')
 const path = require('path')
 const socket = require('socket.io');
-
+const storage = require('node-persist');
+const sharedsession = require("express-socket.io-session");
+const session = require("express-session")({
+  secret: "my-secret",
+  resave: true,
+  saveUninitialized: true
+})
 const app = express()
 const port = 3000
 
@@ -13,46 +19,57 @@ const port = 3000
 const indexRouter = require('./routes/index');
 const roomRouter = require('./routes/rooms');
 
-const server = app.listen(port, listening())
+// modules
+const newTrack = require('./helpers/fetch-track')
 
-function listening() {
-  console.log(`Demo server available on http://localhost:${port}`);
-    // https://ponyfoo.com/articles/a-browsersync-primer#inside-a-node-application
-  browserSync({
-    files: ['views/**/*.{html,js,css,hbs}'],
-    online: false,
-    open: false,
-    port: port + 1,
-    proxy: 'localhost:' + port,
-    ui: false
-  });
-}
+const server = app.listen(port, function () {
+  console.log('Our app is running on http://localhost:' + port);
+});
+
+// function listening() {
+//   console.log(`Demo server available on http://localhost:${port}`);
+//     // https://ponyfoo.com/articles/a-browsersync-primer#inside-a-node-application
+//   browserSync({
+//     files: ['views/**/*.{html,js,css,hbs}'],
+//     online: false,
+//     open: false,
+//     port: port + 1,
+//     proxy: 'localhost:' + port,
+//     ui: false
+//   });
+// }
 
 const io = socket(server)
+storage.init();
 
 // socket functions
 const answerSubmit = require('./sockets/answerSubmit');
 
 let count = 0
 let playerReady = []
+
 io.on('connection', socket => {
   count++
 
   if(count > 1 ) {
     socket.emit('game-begin', 'enough players are present, the game can begin.')
   }
-  console.log('number of people online', count)
 
-  socket.on('answer-input', data => {
-    answerSubmit(data)
+  socket.on('answer-input', async (data, id) => {
+    let username = socket.handshake.session.username
+    answerSubmit(data, id, username, storage, io)
   })
 
-  socket.on('ready-player', id => {
+  socket.on('ready-player', async id => {
     playerReady.push(id)
-    console.log(playerReady)
     if(playerReady.length == count){
+      playerReady.length = 0
       // hier de functie die de modal laat aftellen bij iedereen.
       io.emit('open-modal', 'everyone is ready, start a new game')
+      let track = await newTrack.fetch()
+      await storage.setItem('track', track)
+
+      io.emit('renew-trackUrl', track)
     }
   })
 
@@ -67,6 +84,11 @@ app
   .use(express.static(path.join(__dirname, '/public')))
   .use(bodyParser.urlencoded({ extended: true }))
   .use(bodyParser.json())
+  .use(session)
+
+  io.use(sharedsession(session, {
+    autoSave: true
+  }));
 
 app
   .set('views', path.join(__dirname, 'views'))
@@ -86,4 +108,3 @@ app.post('/create-account', indexRouter)
 app.post('/submit-account', indexRouter)
 
 app.get('/:genre', roomRouter);
-

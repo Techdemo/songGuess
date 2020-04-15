@@ -7,11 +7,12 @@ module.exports = {
     'ladygaga'
   ],
   festival: [
-    'thearcticmonkeys',
     'pearljam',
-    'tameimpala',
     'billieeilish',
-    'typhoon'
+    'tameimpala',
+    'foofighters',
+    'snoopdogg',
+    'motorhead'
   ],
   motown: [
     'steviewonder',

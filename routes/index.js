@@ -16,6 +16,7 @@ router.get('/create-account', function(req, res, next) {
 })
 
 router.post('/create-account', async function(req, res, next){
+  req.session.username = req.body.username
   let add = await db.add(req.body.username)
 
   if(!add){
@@ -32,7 +33,9 @@ router.post('/create-account', async function(req, res, next){
 })
 
 router.post('/submit-account', async function(req, res, next){
+  req.session.username = req.body.username
 // TODO: inloggen moet op de home route. Hoeft geen aparte route te hebben.
+
   let login = await db.login(req.body.username)
 
   if(!login){
@@ -44,6 +47,7 @@ router.post('/submit-account', async function(req, res, next){
   }
 
   res.render('rooms', {
+    username: req.session.username,
     layout: 'default',
   })
 })

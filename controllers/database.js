@@ -12,7 +12,6 @@ exports.add = async name => {
 
   let user = await userRef.get()
   if(user.exists){
-    console.log("user already exists")
     return false
   }
 
@@ -33,4 +32,21 @@ exports.login = async name => {
   .get()
 
   return doc.data()
+}
+
+exports.updateScore = async (name, score) => {
+  console.log("hallo?")
+  const userRef = db.collection('users').doc(name)
+  userRef
+    .get()
+    .then(doc => doc.data())
+    .then(doc =>
+    userRef.set(
+    {
+      festivalPoints: doc.festivalPoints + score,
+    },
+      { merge: true }
+    )
+  )
+  return
 }

@@ -1,4 +1,5 @@
-export function openModal(content){
+export function openModal(socket, content){
+  //TODO: run aud.play after setTimeOut is done
  let modal = document.getElementById('Modal')
  let modalText = document.getElementById('modal-content-text')
 
@@ -19,13 +20,4 @@ export function openModal(content){
     timeLeftText.innerHTML = `new round starts in ${timeleft}`
     timeleft -= 1;
   }, 1000);
-
-
-  //TODO: make a parameter that decides if the modal can be closed down earlier
-  // window.onclick = function (event) {
-  //   if (event.target == modal) {
-  //     clearInterval(downloadTimer);
-  //     modal.style.display = "none";
-  //   }
-  // }
 }
