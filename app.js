@@ -15,6 +15,8 @@ const session = require("express-session")({
 const app = express()
 const port = 3000
 
+require('dotenv').config()
+
 // import routes
 const indexRouter = require('./routes/index');
 const roomRouter = require('./routes/rooms');
