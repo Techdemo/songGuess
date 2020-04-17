@@ -1,4 +1,6 @@
 import { refreshTrack } from './refreshTrack.js';
+import { openRoundModal } from './next-round-modal.js';
+
 const socket = io()
 let aud = document.getElementById("audioPlayer");
 
@@ -54,4 +56,8 @@ socket.on('score', (string) => {
   x.innerHTML = string
   x.className = "show";
   setTimeout(() => { x.className = x.className.replace("show", ""); }, 3000);
+})
+
+socket.on('open-round-modal', () => {
+  openRoundModal('joejoe')
 })

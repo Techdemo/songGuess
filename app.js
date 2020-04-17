@@ -69,7 +69,7 @@ io.on('connection', socket => {
     if (playerReady.length == count) {
       playerReady.length = 0
 
-      io.emit('open-modal', 'everyone is ready, start a new game')
+      io.emit('open-round-modal', 'everyone is ready, start a new game')
       let track = await newTrack.fetch()
       await storage.setItem('track', track)
 
