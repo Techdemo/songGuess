@@ -8,6 +8,7 @@ module.exports = answerSubmit = async (
   storage,
   io
 ) => {
+  console.log("answerSubmit functie loopt")
   let trackFromStorage = await storage.getItem('track')
 
   let artist = await trackFromStorage.artist.replace(/ +/g, "").toLowerCase()
@@ -22,22 +23,17 @@ module.exports = answerSubmit = async (
   if(artistScore >= 0.8 && songScore >= 0.8){
     io.to(id).emit('score', `goedzo ${username}! Je hebt 2 punten verdiend`);
     let score = 2
-    if(username == !undefined){
-      db.updateScore(username, score)
-    } else {
-      return null
-    }
-    // hier een functie die de de score opslaat in de database ond er de
+    db.updateScore(username, score)
   } else if(artistScore >= 0.8){
     io.to(id).emit('score', `lekker ${username}! Alleen de artiest was goed. Je hebt 1 punt verdiend`);
     let score = 1
     db.updateScore(username, score)
-    // hier een functie die de score opslaat in de database
   } else if(songScore >= 0.8) {
     io.to(id).emit('score', `lekker ${username}! Alleen het nummer titel was goed. Je hebt 1 punt verdiend`);
     let score = 1
     db.updateScore(username, score)
-  }   else {
+  } else {
+
     io.to(id).emit('score', `Jammer ${username}! Je hebt 0 punten verdiend`);
   }
 }

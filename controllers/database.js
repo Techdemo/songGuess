@@ -45,6 +45,7 @@ exports.login = async name => {
 }
 
 exports.updateScore = async (name, score) => {
+  console.log("update Score wordt gerunned")
   const userRef = db.collection('users').doc(name)
   userRef
     .get()

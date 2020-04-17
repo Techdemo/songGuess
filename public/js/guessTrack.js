@@ -10,7 +10,7 @@ const guessTrack = (socket) => {
     openModal('Een nieuwe ronde start')
     let songInput = document.getElementById('song-input').value
     let artistInput = document.getElementById('artist-input').value
-
+    console.log("form wordt gesubmitted", songInput, artistInput)
     socket.emit('answer-input', {
         song: songInput,
         artist: artistInput

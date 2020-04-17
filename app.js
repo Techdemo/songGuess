@@ -59,6 +59,8 @@ io.on('connection', socket => {
 
   socket.on('answer-input', async (data, id) => {
     let username = socket.handshake.session.username
+    // console.log("answerinput in de socket server",
+    //   data, id, username)
     answerSubmit(data, id, username, storage, io)
   })
 
