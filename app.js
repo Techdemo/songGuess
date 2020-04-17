@@ -53,7 +53,7 @@ let playerReady = []
 io.on('connection', socket => {
   count++
 
-  if(count > 1 ) {
+  if (count > 1) {
     socket.emit('game-begin', 'enough players are present, the game can begin.')
   }
 
@@ -64,7 +64,7 @@ io.on('connection', socket => {
 
   socket.on('ready-player', async id => {
     playerReady.push(id)
-    if(playerReady.length == count){
+    if (playerReady.length == count) {
       playerReady.length = 0
       // hier de functie die de modal laat aftellen bij iedereen.
       io.emit('open-modal', 'everyone is ready, start a new game')
@@ -88,21 +88,21 @@ app
   .use(bodyParser.json())
   .use(session)
 
-  io.use(sharedsession(session, {
-    autoSave: true
-  }));
+io.use(sharedsession(session, {
+  autoSave: true
+}));
 
 app
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'hbs')
   .engine('hbs', hbs({
-  extname: 'hbs',
-  defaultView: 'default',
-  layoutsDir: __dirname +
-    '/views/layouts/',
-  partialsDir: __dirname +
-    '/views/partials/'
-}))
+    extname: 'hbs',
+    defaultView: 'default',
+    layoutsDir: __dirname +
+      '/views/layouts/',
+    partialsDir: __dirname +
+      '/views/partials/'
+  }))
 
 app.get('/', indexRouter)
 app.get('/create-account', indexRouter)
