@@ -12,8 +12,15 @@ aud.onended = () => {
 
 socket.on('open-modal', (msg) => refreshTrack(socket, msg))
 
-socket.on('game-begin', (msg) => {
-  console.log("game begin")
+socket.on('game-begin', (string) => {
+  let aud = document.getElementById("audioPlayer");
+  aud.play()
+
+  let x = document.getElementById("snackbar");
+  x.innerHTML = string
+  x.className = "show";
+  setTimeout(() => { x.className = x.className.replace("show", ""); }, 3000);
+
 })
 
 let newTrack;
@@ -21,6 +28,9 @@ socket.on('renew-trackUrl', (track) => {
   newTrack = track
   let aud = document.getElementById("audioPlayer");
   aud.src = track.url
+  aud.play()
+  // hier moet een play method komen
+
   form.style.display = "block"
 })
 

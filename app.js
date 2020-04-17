@@ -51,10 +51,10 @@ let count = 0
 let playerReady = []
 
 io.on('connection', socket => {
-  count++
 
+  count++
   if (count > 1) {
-    socket.emit('game-begin', 'enough players are present, the game can begin.')
+    io.emit('game-begin', 'a new player entered the room.')
   }
 
   socket.on('answer-input', async (data, id) => {
@@ -66,7 +66,7 @@ io.on('connection', socket => {
     playerReady.push(id)
     if (playerReady.length == count) {
       playerReady.length = 0
-      // hier de functie die de modal laat aftellen bij iedereen.
+
       io.emit('open-modal', 'everyone is ready, start a new game')
       let track = await newTrack.fetch()
       await storage.setItem('track', track)
