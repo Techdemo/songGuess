@@ -8,7 +8,6 @@ module.exports = answerSubmit = async (
   storage,
   io
 ) => {
-  console.log("answerSubmit functie loopt")
   let trackFromStorage = await storage.getItem('track')
 
   let artist = await trackFromStorage.artist.replace(/ +/g, "").toLowerCase()

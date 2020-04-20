@@ -46,21 +46,35 @@ storage.init();
 
 // socket functions
 const answerSubmit = require('./sockets/answerSubmit');
+const newPlayerBegin = require('./sockets/newPlayerBegin');
 
 let count = 0
 let playerReady = []
+let playerLine = []
+
+// = check of socket id van nieuwe connections al ready zijn.
+// = terwijl gameBusy is, zet nieuwe spelers in de queu
+// = in de renew track url verplaats je iedereen van de playerLine in de playerReady
+// = stuur de string van het nummer mee in het game begin socket.
 
 io.on('connection', socket => {
-
   count++
-  if (count > 1) {
-    io.emit('game-begin', 'a new player entered the room.')
-  }
+  // console.log(socket.id)
+  // check of socket id van nieuwe connection al in de player Ready array staan.
+  // als hij er in staat dan
+  io.emit('game-begin', count)
+
+  socket.on('new-player-begin', async (id) => {
+    playerLine.push(id)
+    if(playerLine.length > 2){
+      newPlayerBegin(id, count, playerLine, io)
+    }
+  })
+
+  // socket.on('check-things')
 
   socket.on('answer-input', async (data, id) => {
     let username = socket.handshake.session.username
-    // console.log("answerinput in de socket server",
-    //   data, id, username)
     answerSubmit(data, id, username, storage, io)
   })
 
@@ -68,8 +82,9 @@ io.on('connection', socket => {
     playerReady.push(id)
     if (playerReady.length == count) {
       playerReady.length = 0
+      playerLine.length = 0
 
-      io.emit('open-round-modal', 'everyone is ready, start a new game')
+      io.emit('open-modal', 'everyone is ready, start a new game')
       let track = await newTrack.fetch()
       await storage.setItem('track', track)
 
@@ -79,6 +94,7 @@ io.on('connection', socket => {
 
   socket.on('disconnect', () => {
     count--
+    // socket.on('game-end', count)
     console.log('number of people online', count)
   })
 })

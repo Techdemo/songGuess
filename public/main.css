@@ -112,7 +112,15 @@ h3 {
 p {
   font-size: var(--text-size);
   color: var(--text-color);
+  font-family: var(--text-font);
 }
+
+a {
+  font-size: var(--text-size);
+  color: var(--text-color);
+  font-family: var(--text-font);
+}
+
 label {
   font-size: var(--text-size);
   color: var(--text-color);

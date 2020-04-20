@@ -14,16 +14,36 @@ aud.onended = () => {
 
 socket.on('open-modal', (msg) => refreshTrack(socket, msg))
 
-socket.on('game-begin', (string) => {
-  let aud = document.getElementById("audioPlayer");
-  aud.play()
+socket.on('game-begin', (count) => {
+  if(count > 1){
+    let x = document.getElementById("snackbar");
+    x.innerHTML = 'a new player entered the room.'
+    x.className = "show";
+    setTimeout(() => { x.className = x.className.replace("show", ""); }, 3000);
 
-  let x = document.getElementById("snackbar");
-  x.innerHTML = string
-  x.className = "show";
-  setTimeout(() => { x.className = x.className.replace("show", ""); }, 3000);
+    let noPlayer = document.getElementById('no-player')
+    noPlayer.innerHTML = ''
+    let id = socket.id
 
+    socket.emit('new-player-begin', {
+      id
+    })
+    // check on things
+  }
 })
+
+// socket.on('game-end', count => {
+//   let x = document.getElementById("snackbar");
+//   x.innerHTML = 'player left the room'
+//   x.className = "show";
+//   setTimeout(() => { x.className = x.className.replace("show", ""); }, 3000);
+//   if(count <= 1){
+//     let noPlayer = document.getElementById('no-player')
+//     noPlayer.innerHTML = 'Not enough players in this room. Please wait until new players enter'
+//   }
+//   const form = document.getElementById('track-form')
+//   form.style.display = "none"
+// })
 
 let newTrack;
 socket.on('renew-trackUrl', (track) => {
@@ -31,8 +51,6 @@ socket.on('renew-trackUrl', (track) => {
   let aud = document.getElementById("audioPlayer");
   aud.src = track.url
   aud.play()
-  // hier moet een play method komen
-
   form.style.display = "block"
 })
 
@@ -60,4 +78,12 @@ socket.on('score', (string) => {
 
 socket.on('open-round-modal', () => {
   openRoundModal('joejoe')
+})
+
+socket.on('wait', (string) => {
+  console.log("wordt wait uitgevoerd?")
+  let x = document.getElementById("snackbar");
+  x.innerHTML = string
+  x.className = "show";
+  setTimeout(() => { x.className = x.className.replace("show", ""); }, 3000);
 })
