@@ -22,7 +22,7 @@ module.exports = answerSubmit = async (
   if(artistScore >= 0.8 && songScore >= 0.8){
     io.to(id).emit('score', `goedzo ${username}! Je hebt 2 punten verdiend`);
     let score = 2
-    db.updateScore(username, score)
+    db.updateScore(username., score)
   } else if(artistScore >= 0.8){
     io.to(id).emit('score', `lekker ${username}! Alleen de artiest was goed. Je hebt 1 punt verdiend`);
     let score = 1
